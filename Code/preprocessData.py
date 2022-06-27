@@ -24,7 +24,7 @@ df2018 = pd.read_csv(unprocessedDataDir+"/HappinessReport/2018.csv")
 df2019 = pd.read_csv(unprocessedDataDir+"/HappinessReport/2019.csv")
 happinessCountriesSeries = set(df2015["Country"]).intersection(set(df2016["Country"])).intersection(set(df2017["Country"])).intersection(set(df2018["Country or region"])).intersection(set(df2019["Country or region"]))
 
-dfGdp = pd.read_csv(unprocessedDataDir+"/WorldGDP/gdp.csv")
+dfGdp = pd.read_csv(unprocessedDataDir+"/WorldGDP/gdp_per_capita.csv")
 
 countriesAvailable = list(set(happinessCountriesSeries).intersection(set(dfGdp["Country Name"])))
 availableYears = ["2015", "2016", "2017", "2018", "2019"]

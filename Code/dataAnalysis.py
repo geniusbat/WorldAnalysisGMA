@@ -15,6 +15,7 @@ for index, row in dfGdp.iterrows():
     limit -= 1
     data = [row[year] for year in availableYears]
     plt.plot(x, data, label="{}".format(row["Country"]))
+    plt.legend()
     if limit == 0:
         break
 plt.show()
@@ -47,9 +48,8 @@ maxVal = max(scores); minVal = min(scores)
 for i in range(len(scores)):
     scores[i] = (scores[i] - minVal)/(maxVal-minVal)
 plt.figure()
-plt.stem(scores,gdps,label="FF")
-plt.ylim(0,0.85)
-plt.xlim(0, 1)
+plt.scatter(scores,gdps)
+
 for i in range(len(scores)):
     plt.text(scores[i], gdps[i], df2015.iloc[i]["Country"])
 plt.show()
