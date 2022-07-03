@@ -35,6 +35,7 @@ plt.stem(availableYears,y,label="Spain")
 plt.stem(availableYears,[df.loc[df["Country"]=="Germany"]["Score"].values[0] for year, df in happinessDataframes.items()],label="Germany")
 plt.show()
 '''
+'''
 #Happiness to GDP
 df2015 = pd.read_csv(processedDataDir+"/Happiness2015")
 dfGdp = pd.read_csv(processedDataDir+"/Gdp")
@@ -52,4 +53,25 @@ plt.scatter(scores,gdps)
 
 for i in range(len(scores)):
     plt.text(scores[i], gdps[i], df2015.iloc[i]["Country"])
+plt.show()
+'''
+#GDP evolution
+dfGdp = pd.read_csv(processedDataDir+"/Gdp")
+countries = dfGdp["Country"].to_list()[:10]
+gdp2015 = dfGdp["2015"].to_list()[:10]
+gdp2016 = dfGdp["2016"].to_list()[:10]
+gdp2017 = dfGdp["2017"].to_list()[:10]
+gdp2018 = dfGdp["2018"].to_list()[:10]
+gdp2019 = dfGdp["2019"].to_list()[:10]
+
+X_axis = np.arange(len(countries))
+
+plt.figure()
+plt.bar(X_axis-0.4, gdp2015, label="2015")
+plt.bar(X_axis-0.2, gdp2016, label="2016")
+plt.bar(X_axis, gdp2017, label="2017")
+plt.bar(X_axis+0.2, gdp2018, label="2018")
+plt.bar(X_axis+0.4, gdp2019, label="2019")
+plt.xticks(X_axis, countries)
+plt.legend()
 plt.show()
