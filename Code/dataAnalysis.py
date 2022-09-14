@@ -1,6 +1,7 @@
 import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
+import clustering
 
 processedDataDir = "ProcessedData"
 availableYears = ["2015", "2016", "2017", "2018", "2019"]
@@ -56,6 +57,7 @@ for i in range(len(scores)):
 plt.show()
 '''
 #GDP evolution
+'''
 dfGdp = pd.read_csv(processedDataDir+"/Gdp")
 countries = dfGdp["Country"].to_list()[:10]
 gdp2015 = dfGdp["2015"].to_list()[:10]
@@ -75,3 +77,34 @@ plt.bar(X_axis+0.4, gdp2019, label="2019")
 plt.xticks(X_axis, countries)
 plt.legend()
 plt.show()
+'''
+#Countries that improved gdp from 2018 to 2019
+dfGdp = pd.read_csv(processedDataDir+"/Gdp")
+countries = dfGdp["Country"].to_list()
+gdp2018 = dfGdp["2018"].to_list()
+gdp2019 = dfGdp["2019"].to_list()
+countriesThatImproved = {}
+countryClass = clustering.getClasses("2015", True)
+classesOfCountriesThatImproved = {}
+classesOfCountriesThatImproved[-1] = []
+for index in range(len(countries)):
+    country = countries[index]
+    gdpA = gdp2018[index]
+    gdpB = gdp2019[index]
+    if gdpB >= gdpA:
+        countriesThatImproved[country] = gdpB-gdpA
+        try:
+            key = countryClass[index]
+        except:
+            key = -1
+        if key in classesOfCountriesThatImproved:
+            classesOfCountriesThatImproved[key].append(country)
+        else:
+            classesOfCountriesThatImproved[key] = [country]
+
+plt.figure()
+plt.bar(list(countriesThatImproved.keys()), list(countriesThatImproved.values()))
+plt.legend()
+plt.show()
+
+print(classesOfCountriesThatImproved)

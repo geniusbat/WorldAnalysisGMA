@@ -1,4 +1,3 @@
-from typing import Dict
 import numpy as np
 import pandas as pd
 
@@ -68,6 +67,18 @@ for year in availableYears:
 for year in availableYears:
     newDfGdp[year] = (newDfGdp[year]-minVal)/(maxVal-minVal)
 
+#Remove nulls or get from the previous year
+#print(newDf2017[newDf2017.isnull().any(axis=1)])
+for index, nullRow in newDf2017[newDf2017.isnull().any(axis=1)].iterrows():
+    for field, value in nullRow.iteritems():
+        if pd.isnull(value):
+            try:
+                newDf2017.iloc[index][field]= newDf2016.loc[nullRow["Country"]][field]
+            except:
+                print("failed")
+                newDf2017.iloc[index][field] = float(0)
+
+'''
 newDf2015.to_csv(processedDataDir+"/Happiness2015")
 newDf2016.to_csv(processedDataDir+"/Happiness2016")
 newDf2017.to_csv(processedDataDir+"/Happiness2017")
@@ -92,3 +103,4 @@ np.save(processedDataDir+"/multiDimData.npy", data)
 
 print("Done preprocessing")
 
+'''

@@ -61,7 +61,7 @@ labels = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3
 labels = np.array(labels)
 data = np.array(listData, dtype=object)
 
-model = tree.DecisionTreeClassifier()
+model = tree.DecisionTreeClassifier(min_samples_leaf=5)
 model = model.fit(data, labels)
 
 plt.figure(figsize=(25,25), dpi=150)
