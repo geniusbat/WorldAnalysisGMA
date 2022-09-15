@@ -1,7 +1,7 @@
 import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
-import clustering
+from clustering import getClasses
 
 processedDataDir = "ProcessedData"
 availableYears = ["2015", "2016", "2017", "2018", "2019"]
@@ -79,12 +79,14 @@ plt.legend()
 plt.show()
 '''
 #Countries that improved gdp from 2018 to 2019
+'''
 dfGdp = pd.read_csv(processedDataDir+"/Gdp")
 countries = dfGdp["Country"].to_list()
 gdp2018 = dfGdp["2018"].to_list()
 gdp2019 = dfGdp["2019"].to_list()
+
 countriesThatImproved = {}
-countryClass = clustering.getClasses("2015", True)
+countryClass = getClasses("2018", False)
 classesOfCountriesThatImproved = {}
 classesOfCountriesThatImproved[-1] = []
 for index in range(len(countries)):
@@ -108,3 +110,25 @@ plt.legend()
 plt.show()
 
 print(classesOfCountriesThatImproved)
+'''
+#Countries that increased their gdp the most
+dfGdp = pd.read_csv(processedDataDir+"/Gdp")
+gdpChange = {}
+for index, row in dfGdp.iterrows():
+    gdpChange[row["Country"]] = (row["2016"]-row["2015"])+(row["2017"]-row["2016"])+(row["2018"]-row["2017"])+(row["2019"]-row["2018"])
+sortedDict = dict(sorted(gdpChange.items(), key=lambda item:item[1], reverse=True))
+getFirst = 10
+sortedCountries = list(sortedDict)[:getFirst]
+sortedIncreases = list(sortedDict.values())[:getFirst]
+plt.figure()
+plt.bar(sortedCountries,sortedIncreases)
+plt.show()
+#Countries that decreased their gdp the most
+getLast = 10
+sortedCountries = list(sortedDict)[-getLast:len(sortedDict)]
+sortedCountries.reverse()
+sortedIncreases = list(sortedDict.values())[-getLast:len(sortedDict)]
+sortedIncreases.reverse()
+plt.figure()
+plt.bar(sortedCountries,sortedIncreases)
+plt.show()

@@ -1,5 +1,8 @@
 import numpy as np
+import openpyxl
 import pandas as pd
+
+#PRE-EXCEL
 
 def substituteColumns(df:pd.DataFrame, columns:dict):
     for column, names in columns.items():
@@ -16,6 +19,7 @@ def deleteUnusedColumns(df:pd.DataFrame, columns:dict):
 
 unprocessedDataDir = "UnprocessedData"
 processedDataDir = "ProcessedData"
+'''
 df2015 = pd.read_csv(unprocessedDataDir+"/HappinessReport/2015.csv")
 df2016 = pd.read_csv(unprocessedDataDir+"/HappinessReport/2016.csv")
 df2017 = pd.read_csv(unprocessedDataDir+"/HappinessReport/2017.csv")
@@ -67,18 +71,7 @@ for year in availableYears:
 for year in availableYears:
     newDfGdp[year] = (newDfGdp[year]-minVal)/(maxVal-minVal)
 
-#Remove nulls or get from the previous year
-#print(newDf2017[newDf2017.isnull().any(axis=1)])
-for index, nullRow in newDf2017[newDf2017.isnull().any(axis=1)].iterrows():
-    for field, value in nullRow.iteritems():
-        if pd.isnull(value):
-            try:
-                newDf2017.iloc[index][field]= newDf2016.loc[nullRow["Country"]][field]
-            except:
-                print("failed")
-                newDf2017.iloc[index][field] = float(0)
 
-'''
 newDf2015.to_csv(processedDataDir+"/Happiness2015")
 newDf2016.to_csv(processedDataDir+"/Happiness2016")
 newDf2017.to_csv(processedDataDir+"/Happiness2017")
@@ -102,5 +95,60 @@ data = np.array(data)
 np.save(processedDataDir+"/multiDimData.npy", data)
 
 print("Done preprocessing")
+'''
+'''
+#MID-EXCEL
+df2015 = pd.read_csv(processedDataDir+"/Happiness2015")
+df2016 = pd.read_csv(processedDataDir+"/Happiness2016")
+df2017 = pd.read_csv(processedDataDir+"/Happiness2017")
+df2018 = pd.read_csv(processedDataDir+"/Happiness2018")
+df2019 = pd.read_csv(processedDataDir+"/Happiness2019")
+dfgdp = pd.read_csv(processedDataDir+"/gdp")
+
+with pd.ExcelWriter(processedDataDir+"/allData.xlsx") as writer:
+    df2015.to_excel(writer, "2015", index=False)
+    df2016.to_excel(writer, "2016", index=False)
+    df2017.to_excel(writer, "2017", index=False)
+    df2018.to_excel(writer, "2018", index=False)
+    df2019.to_excel(writer, "2019", index=False)
+    dfgdp.to_excel(writer, "gdp", index=False)
+
+print("Wrote to excel!")
 
 '''
+
+#POST-EXCEL
+
+with pd.ExcelFile(processedDataDir+"/allDataCorrected.xlsx") as file:
+    df2015 = pd.read_excel(file, "2016")
+    df2016 = pd.read_excel(file, "2017")
+    df2017 = pd.read_excel(file, "2017")
+    df2018 = pd.read_excel(file, "2018")
+    df2019 = pd.read_excel(file, "2019")
+    dfgdp = pd.read_excel(file, "gdp")
+
+df2015.to_csv(processedDataDir+"/Happiness2015")
+df2016.to_csv(processedDataDir+"/Happiness2016")
+df2017.to_csv(processedDataDir+"/Happiness2017")
+df2018.to_csv(processedDataDir+"/Happiness2018")
+df2019.to_csv(processedDataDir+"/Happiness2019")
+dfgdp.to_csv(processedDataDir+"/Gdp")
+
+countriesAvailable = list(df2015["Country"].values)
+
+#Multidimensional
+data = []
+for country in countriesAvailable:
+    row = []#[country]
+    row.append(df2015.loc[df2015["Country"]==country].values.tolist()[0]); row[-1].pop(0)
+    row.append(df2016.loc[df2016["Country"]==country].values.tolist()[0]); row[-1].pop(0)
+    row.append(df2017.loc[df2017["Country"]==country].values.tolist()[0]); row[-1].pop(0)
+    row.append(df2018.loc[df2018["Country"]==country].values.tolist()[0]); row[-1].pop(0)
+    row.append(df2019.loc[df2019["Country"]==country].values.tolist()[0]); row[-1].pop(0)
+    row.append(dfgdp.loc[dfgdp["Country"]==country].values.tolist()[0]); row[-1].pop(0); row[-1].append(0)
+    data.append(row)
+
+data = np.array(data)
+np.save(processedDataDir+"/multiDimData.npy", data)
+
+print("Finished it all, pls enjoy your data!")

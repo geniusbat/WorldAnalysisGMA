@@ -1,6 +1,7 @@
+from webbrowser import get
 import numpy as np
 import pandas as pd
-from sklearn.cluster import AgglomerativeClustering, DBSCAN
+from sklearn.cluster import AgglomerativeClustering, AffinityPropagation, OPTICS
 import matplotlib.pylab as plt
 
 processedDataDir = "ProcessedData"
@@ -9,6 +10,7 @@ processedDataDir = "ProcessedData"
 df2015 = pd.read_csv(processedDataDir+"/Happiness2017")
 dfGdp = pd.read_csv(processedDataDir+"/Gdp")
 
+'''
 print(df2015[df2015.isnull().any(axis=1)])
 
 listData = []
@@ -51,12 +53,12 @@ for team in teams:
         plt.text(data[3],data[0],data[1])
 plt.show()
 
-
+'''
 def getClasses(year, show=False):
     df2015 = pd.read_csv(processedDataDir+"/Happiness"+year)
     dfGdp = pd.read_csv(processedDataDir+"/Gdp")
-    df2015 = clean_dataset(df2015)
-    dfGdp = clean_dataset(dfGdp)
+    #print(dfGdp[dfGdp.isna().any(axis=1)])
+    #print(df2015[df2015.isna().any(axis=1)])
     listData = []
     for index, row in df2015.iterrows():
         element = []
@@ -70,7 +72,8 @@ def getClasses(year, show=False):
 
     data = np.array(listData, dtype=object)
 
-    clustering : AgglomerativeClustering = AgglomerativeClustering(n_clusters=7).fit(data)
+    #clustering : AgglomerativeClustering = AgglomerativeClustering(n_clusters=7).fit(data)
+    clustering = AffinityPropagation().fit(data)
     if show:
         teams = {}
 
@@ -85,18 +88,17 @@ def getClasses(year, show=False):
                 teams[label] = [aux]
 
         plt.figure()
+        showText = False
         for team in teams:
             teamData = teams[team]
             x = [data[3] for data in teamData]
             y = [data[0] for data in teamData]
             plt.scatter(x, y)
-            for data in teamData:
-                plt.text(data[3],data[0],data[1])
+            if showText:
+                for data in teamData:
+                    plt.text(data[3],data[0],data[1])
         plt.show()
     return clustering.labels_
 
-def clean_dataset(df):
-    assert isinstance(df, pd.DataFrame), "df needs to be a pd.DataFrame"
-    df.dropna(inplace=True)
-    indices_to_keep = ~df.isin([np.nan, np.inf, -np.inf]).any(1)
-    return df[indices_to_keep].astype(np.str0)
+if __name__ == "__main__":
+    getClasses("2019", True)

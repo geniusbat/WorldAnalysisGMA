@@ -4,6 +4,7 @@ from sklearn import tree
 from sklearn.tree import _tree
 from sklearn.cluster import AgglomerativeClustering, DBSCAN
 import matplotlib.pylab as plt
+from clustering import getClasses
 
 
 processedDataDir = "ProcessedData"
@@ -53,10 +54,13 @@ for index, row in df2015.iterrows():
     element.extend(aux)
     listData.append(element)
 
+'''
 labels = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5, 3, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2,
 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]'''
+
+labels = getClasses("2015")
 
 labels = np.array(labels)
 data = np.array(listData, dtype=object)

@@ -79,7 +79,7 @@ df2018 = pd.read_csv(processedDataDir+"/Happiness2018")
 df2019 = pd.read_csv(processedDataDir+"/Happiness2019") 
 dfGdp = pd.read_csv(processedDataDir+"/Gdp")
 
-dfs = [df2015, df2016, df2016, df2017, df2018, df2019]
+dfs = [df2015, df2016, df2017, df2018, df2019]
 
 for index in range(len(dfs)):
     df = dfs[index]
