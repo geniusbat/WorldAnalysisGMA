@@ -1,4 +1,3 @@
-from webbrowser import get
 import numpy as np
 import pandas as pd
 from sklearn.cluster import AgglomerativeClustering, AffinityPropagation, OPTICS
@@ -7,8 +6,8 @@ import matplotlib.pylab as plt
 processedDataDir = "ProcessedData"
 
 
-df2015 = pd.read_csv(processedDataDir+"/Happiness2017")
-dfGdp = pd.read_csv(processedDataDir+"/Gdp")
+#df2015 = pd.read_csv(processedDataDir+"/Happiness2017")
+#dfGdp = pd.read_csv(processedDataDir+"/Gdp")
 
 '''
 print(df2015[df2015.isnull().any(axis=1)])
